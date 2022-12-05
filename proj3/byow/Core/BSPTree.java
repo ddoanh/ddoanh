@@ -12,7 +12,6 @@ public class BSPTree {
     Container root;
     ArrayDeque<Container> containerTree;
     List<RoomGenerator> rooms;
-
     static int height = 50;
     // 50 works for most seeds
     static int width = 80;
@@ -108,8 +107,6 @@ public class BSPTree {
         }
     }
 
-
-
     private void createRooms(Container c, TETile[][] world) {
         if (c != null) {
             if (c.left == null && c.right == null) {
@@ -119,8 +116,6 @@ public class BSPTree {
             createRooms(c.right, world);
         }
     }
-
-
 
     public boolean split (Container c) {
         Container leftRoom, rightRoom;

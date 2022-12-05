@@ -198,7 +198,6 @@ public class Engine {
         ter.renderFrame(currWorld, world.player, world);
     }
 
-
     private void hud(TETile[][] thisWorld) {
         while (!StdDraw.hasNextKeyTyped()) {
             if (mouseChangesCheck(StdDraw.mouseX(), StdDraw.mouseY())) {
