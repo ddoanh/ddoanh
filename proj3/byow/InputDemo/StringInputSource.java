@@ -1,5 +1,13 @@
 package byow.InputDemo;
 
+import byow.InputDemo.InputSource;
+
+/**
+ * Allows interacting with the string argument as inputs.
+ * With reference to the example class in InputDemo.
+ *
+ * @author Hsingyi Lin
+ */
 public class StringInputSource implements InputSource {
     private String input;
     private int index;

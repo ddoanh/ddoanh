@@ -3,7 +3,7 @@ package byow.Core;
 /**
  * @Source: https://bladecast.pro/unity-tutorial/how-to-procedurally-generate-a-dungeon-bsp-method-unity-tilemap#bspSlideShow
  *
- * Start with an initial World size of 80 x 40, that is the current Container class.
+ * Start with an initial World size of 80 x 50, that is the current Container class.
  * Has the Tile coordinate where the current container is stored.
  * Has the Tile gridSize, which is the width x height.
  * Has center, which is stored to later connect the rooms, generated inside containers, together.

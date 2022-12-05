@@ -8,8 +8,16 @@ package byow.Core;
 public class Tile {
     public int x;
     public int y;
+
     public Tile (int a, int b) {
         x = a;
         y = b;
+    }
+
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
     }
 }
