@@ -11,6 +11,10 @@ import edu.princeton.cs.algs4.Out;
 
 import java.awt.*;
 
+/**
+ * @Source: https://www.programcreek.com/java-api-examples/?class=edu.princeton.cs.algs4.StdDraw&method=mouseX
+ *
+ */
 public class Engine {
     public enum Direction {UP, RIGHT, DOWN, LEFT};
     public enum Status {START, SEED, PLAY};
@@ -21,8 +25,11 @@ public class Engine {
     private Status status;
     private StringBuilder seedProcessing;
     private long seed;
-    private static final Font SUBTITLE_FONT = new Font("TIMES", Font.BOLD, 20);
     private BSPTree world;
+    private double mouseX;
+    private double mouseY;
+    private int pointX;
+    private int pointY;
 
     public Engine() {
         ter = new TERenderer();
@@ -93,35 +100,25 @@ public class Engine {
      */
     private void parseMenuChoice(char ch, boolean draw) {
         if (status == Status.START && ch == 'L') {
-            load();
-//            drawWorld();
-        }
-        else if (status == Status.START && ch == 'N') {
+            loadWorld();
+        } else if (status == Status.START && ch == 'N') {
+            inputs.append(ch);
             status = Status.SEED;
+            if (draw) drawSeedScreen();
+        } else if (status == Status.SEED && Character.isDigit(ch)) {
             inputs.append(ch);
-            if (draw) {
-                drawSeedScreen();
-            }
-        }
-        else if (status == Status.SEED && Character.isDigit(ch)) {
             seedProcessing.append(ch);
-            inputs.append(ch);
-            if (draw) {
-                drawSeedScreen();
-            }
-        }
-        else if (status == Status.SEED && ch == 'S') {
+            if (draw) drawSeedScreen();
+        } else if (status == Status.SEED && ch == 'S') {
             if (seedProcessing.length() > 25) {
                 seed = Long.parseLong(seedProcessing.substring(0, 25));
-            }
-            else {
+            } else {
                 seed = Long.parseLong(seedProcessing.toString());
             }
             inputs.append(ch);
             world = new BSPTree(String.valueOf(seed));
             status = Status.PLAY;
-        }
-        else if (ch == 'Q') {
+        } else if (ch == 'Q') {
             System.exit(0);
         }
     }
@@ -146,7 +143,7 @@ public class Engine {
             case 'O' : world.light_on = false;
                 inputs.append(ch);
                 break;
-            case ':': save();
+            case ':': saveWorld();
                 break;
             case 'Q': System.exit(0);
         }
@@ -164,30 +161,30 @@ public class Engine {
     }
 
     private void drawMenu() {
-        StdDraw.clear(new Color(195, 127, 108, 255));
-        StdDraw.setPenColor(new Color(61, 14, 9, 255));
+        StdDraw.clear(Color.black);
+        StdDraw.setPenColor(new Color(242, 107, 138, 255));
         StdDraw.setPenRadius();
-        Font titleFONT = new Font("TIMES", Font.BOLD, 50);
+        Font titleFONT = new Font("Monaco", Font.BOLD, 55);
         StdDraw.setFont(titleFONT);
-        StdDraw.text(WIDTH / 2, HEIGHT - 14, "CS 61B: THE GAME");
-        StdDraw.setFont(SUBTITLE_FONT);
-        StdDraw.text(WIDTH / 2, HEIGHT / 2, "NEW GAME (N)");
-        StdDraw.text(WIDTH / 2, HEIGHT / 2 - 4, "LOAD GAME (L)");
-        StdDraw.text(WIDTH / 2, HEIGHT / 2 - 8, "QUIT (Q)");
+        StdDraw.text(WIDTH / 2, HEIGHT - 14, "CS 61B: THE GAME IN YOUR AREA");
+        Font selection = new Font("Monaco", Font.BOLD, 35);
+        StdDraw.setFont(selection);
+        StdDraw.text(WIDTH / 2, HEIGHT / 2 , "NEW GAME (N)");
+        StdDraw.text(WIDTH / 2, HEIGHT / 2 - 5, "LOAD GAME (L)");
+        StdDraw.text(WIDTH / 2, HEIGHT / 2 - 10, "QUIT (Q)");
         StdDraw.show();
     }
 
     private void drawSeedScreen() {
         String input = inputs.toString();
         input = input.substring(input.indexOf('N') + 1);
-
         StdDraw.clear(Color.black);
         StdDraw.setPenColor(Color.white);
         StdDraw.setPenRadius();
         Font titleFONT = new Font("Monaco", Font.BOLD, 50);
         StdDraw.setFont(titleFONT);
         StdDraw.text(WIDTH / 2, HEIGHT - 18, "NEW GAME");
-        Font seedFont = new Font("Monaco", Font.BOLD, 15);
+        Font seedFont = new Font("Monaco", Font.BOLD, 30);
         StdDraw.setFont(seedFont);
         StdDraw.text(WIDTH / 2, HEIGHT / 2, "ENTER SEED & PRESS \"S\".");
         StdDraw.setPenColor(Color.pink);
@@ -195,33 +192,15 @@ public class Engine {
         StdDraw.show();
     }
 
-//    private void addInstruction() {
-//        Font denote = new Font("Times", Font.BOLD, 30);
-//        StdDraw.setFont(denote);
-//        StdDraw.setPenColor(new Color(0, 27, 220, 255));
-//        StdDraw.textLeft(0, HEIGHT - 1, "O:Turn the light on");
-//        StdDraw.textLeft(0, HEIGHT - 3, "O:Turn the light off");
-//    }
-
     private void drawWorld() {
         TETile[][] currWorld = world.worldframe();
         hud(currWorld);
         ter.renderFrame(currWorld, world.player, world);
-        StdDraw.show();
     }
 
-//    private void addNotation() {
-//        StdDraw.setPenColor(Color.yellow);
-//        StdDraw.textRight(WIDTH - 1, HEIGHT - 1, "\":\"O: Turn light off");
-//        StdDraw.textRight(WIDTH - 2, HEIGHT - 2, "\":\"P: Turn light on");
-//    }
 
-    private double mouseX;
-    private double mouseY;
     private void hud(TETile[][] thisWorld) {
         while (!StdDraw.hasNextKeyTyped()) {
-            int pointX = (int) Math.floor(StdDraw.mouseX());
-            int pointY = (int) Math.floor(StdDraw.mouseY());
             if (mouseChangesCheck(StdDraw.mouseX(), StdDraw.mouseY())) {
                 pointX = (int) Math.floor(StdDraw.mouseX());
                 pointY = (int) Math.floor(StdDraw.mouseY());
@@ -231,12 +210,10 @@ public class Engine {
             StdDraw.setPenColor(Color.yellow);
             Font hudFont = new Font("Monaco", Font.BOLD, 20);
             StdDraw.setFont(hudFont);
-            //StdDraw.textLeft(1, HEIGHT - 1, thisWorld[pointX][pointY].description());
-            StdDraw.textRight(WIDTH - 1, HEIGHT - 1, thisWorld[pointX][pointY].description());
+            StdDraw.textLeft(1, HEIGHT - 1, thisWorld[pointX][pointY].description());
             StdDraw.show();
         }
     }
-
 
     private boolean mouseChangesCheck(double x, double y) {
         if (x == mouseX || y == mouseY) return false;
@@ -246,19 +223,14 @@ public class Engine {
             return true;
         }
     }
-    /**
-     * Saves the current inputs to a text file.
-     */
-    private void save() {
+
+    private void saveWorld() {
         Out out = new Out("./out/production/proj3/byow/save_data.txt");
         out.println(inputs.toString());
         out.close();
     }
 
-    /**
-     * Reads the saved text file and handles the inputs in the file.
-     */
-    private void load() {
+    private void loadWorld() {
         In in = new In("./out/production/proj3/byow/save_data.txt");
         if (in.exists()) {
             String s = in.readAll();
