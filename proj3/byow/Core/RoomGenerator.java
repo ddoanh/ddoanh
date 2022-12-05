@@ -38,7 +38,6 @@ public class RoomGenerator {
                 for (int i = row; i <= rowEnd; i++) {
                     for (int j = col; j <= colEnd; j++) {
                         if (i == row || i == rowEnd || j == col || j == colEnd) {
-//                            if (!world[i][j].description().equals("floor")) {
                             walls.add(new Tile(i, j));
                         } else {
                             floors.add(new Tile(i, j));

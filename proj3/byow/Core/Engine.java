@@ -203,14 +203,13 @@ public class Engine {
             if (mouseChangesCheck(StdDraw.mouseX(), StdDraw.mouseY())) {
                 pointX = (int) Math.floor(StdDraw.mouseX());
                 pointY = (int) Math.floor(StdDraw.mouseY());
-                ter.renderFrame(thisWorld, world.player, world);
             }
-            ter.renderFrame(thisWorld, world.player, world);
             StdDraw.setPenColor(Color.yellow);
             Font hudFont = new Font("Monaco", Font.BOLD, 20);
             StdDraw.setFont(hudFont);
             StdDraw.textLeft(1, HEIGHT - 1, thisWorld[pointX][pointY].description());
             StdDraw.show();
+            ter.renderFrame(thisWorld, world.player, world);
         }
     }
 

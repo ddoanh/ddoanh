@@ -8,10 +8,6 @@ import byow.TileEngine.Tileset;
  */
 
 public class Hallways {
-
-    private int h = BSPTree.height;
-    private int w = BSPTree.width;
-
     public static void connectHallways (Container c, TETile[][] world) {
         if (c.left != null && c.right != null) {
             drawHallways(c.left, c.right, world);

@@ -12,17 +12,17 @@ package byow.Core;
 public class Container {
     int x; int y; int w; int h;
     Tiles center;
-    Container left;
-    Container right;
+    Container left = null;
+    Container right = null;
 
     public Container(int x, int y, int w, int h){
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
-        center = new Tiles (x + (w/2), y+ (h/2));
-        left = null;
-        right = null;
+        center = new Tiles (x + (w/2), y + (h/2));
+//        left = null;
+//        right = null;
     }
 
     public class Tiles {
